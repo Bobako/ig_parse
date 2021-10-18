@@ -39,6 +39,19 @@ class Parser:
             self.proxies = {}
         if login and password:
             self.authorize(login, password)
+        if proxy:
+            self.test_proxy()
+
+
+    def test_proxy(self):
+        r = requests.get("http://icanhazip.com").text
+        p = requests.get("http://icanhazip.com", proxies=self.proxies)
+        if p.status_code != 200 or p.text == r:
+            print(f"Proxy doesnt working and will not be used")
+            self.proxies = {}
+        else:
+            print(f"Proxy connection via {p.text} established")
+
 
     def authorize(self, username, password):
         """Авторизоваться под именем {username} по паролю {password}.
@@ -122,6 +135,16 @@ class Parser:
         uid = j["graphql"]["user"]["id"]
         self.uids[username] = uid
         return uid
+
+    def get_profile_pic(self, username):
+        """Получить аватар пользователся с именем {username}"""
+        url = f"https://www.instagram.com/{username}/?__a=1"
+        j = self.__get_json(url)
+        try:
+            pic_url = j["graphql"]["user"]["profile_pic_url_hd"]
+        except KeyError:
+            pic_url = j["graphql"]["user"]["profile_pic_url"]
+        return pic_url
 
     def get_highlights_list(self, login):
         """Получить список альбомов highlights аккаунта с именем {login}.
@@ -317,7 +340,8 @@ class Parser:
 
 
 if __name__ == '__main__':
-    p = Parser(session_id="15621657494:ZDvWbBNEN6FXol:8")
-    a = p.get_posts('kobol._', 0, 11)
-    for b in a:
-        print(b)
+    proxy = 'socks5://127.0.0.1:9050'
+    p = Parser(session_id="15621657494%3A8aDoMkpLMNuBX9%3A8", proxy=proxy)
+    a = p.get_posts('kobol._')
+    print(a)
+

@@ -50,6 +50,12 @@ if __name__ == '__main__':
                 start = int(start)
                 fin = int(fin)
                 print(parser.get_reels_by_date(username, start, fin))
+            elif sys.argv[1] == "ava":
+                _, _, username = sys.argv
+                print(parser.get_profile_pic(username))
+            elif sys.argv[1] == "uid":
+                _, _, username = sys.argv
+                print(parser.get_user_id(username))
     else:
         print("Use with args")
 
