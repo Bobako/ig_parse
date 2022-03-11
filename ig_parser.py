@@ -341,7 +341,7 @@ class Parser:
 
 if __name__ == '__main__':
     proxy = 'socks5://127.0.0.1:9050'
-    p = Parser(session_id="15621657494%3A8aDoMkpLMNuBX9%3A8", proxy=proxy)
-    a = p.get_posts('kobol._')
+    p = Parser('login_vagin', 'parol') #proxy=proxy)
+    a = p.get_posts('hohol_staff')
     print(a)
 
